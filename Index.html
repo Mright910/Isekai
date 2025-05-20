@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+    <title>Форма ввода</title>
+</head>
+<body>
+  <meta charset="UTF-8">
+    <title>Лабораторная 4 - CGI</title>
+</head>
+<body>
+
+    <h1>Форма взаимодействия с сервером (CGI)</h1>
+
+    <form action="/cgi-bin/obrabotka.cgi" method="POST" enctype="application/x-www-form-urlencoded">
+        <label for="name">Имя:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <input type="submit" value="Отправить">
+    </form>
+
+    <h1>Форма обратной связи</h1>
+    <form id="userForm">
+        <label for="name">Имя:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="age">Возраст:</label><br>
+        <input type="number" id="age" name="age" required><br><br>
+        
+        <input type="submit" value="Отправить">
+    </form>
+
+    <div id="result"></div>
+
+    <!-- Вставляем скрипт -->
+    <script>
+    // Слушаем отправку формы
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Останавливаем отправку формы
+
+        // Получаем значения
+        const name = document.getElementById('name').value.trim();
+        const age = document.getElementById('age').value.trim();
+        const resultDiv = document.getElementById('result');
+
+        // Проверяем и формируем ответ
+        if(name === '' || age === '') {
+            resultDiv.textContent = 'Пожалуйста, заполните все поля!';
+            resultDiv.style.color = 'red';
+        } else {
+            resultDiv.textContent = `Здравствуйте, ${name}! Вам ${age} лет.`;
+            resultDiv.style.color = 'green';
+        }
+    });
+    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Исекай Аниме 2023–2025</title>
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('d:\Users\User\Downloads\Merlin Fgo GIF - Merlin Fgo Fate - Discover & Share GIFs.gif') no-repeat center center fixed;
+      background-size: cover;
+      color: #f0f0f0;
+    }
+
+    header {
+      background-color: rgba(63, 63, 94, 0.8);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      color: #ffccff;
+    }
+
+    nav {
+      margin: 20px;
+      background-color: rgba(42, 42, 61, 0.8);
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    nav li {
+      margin: 10px 0;
+    }
+
+    nav a {
+      color: #aad4ff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #ffe3ff;
+      text-shadow: 0 0 10px #ff8cf5;
+    }
+
+    section {
+      padding: 20px;
+      background-color: rgba(53, 53, 86, 0.8);
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 204, 255, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    section:hover {
+      transform: scale(1.02);
+    }
+
+    h2 {
+      color: #ffcaff;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    .anime-image {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 10px;
+      margin: 10px 0;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .anime-image:hover {
+      transform: scale(1.05);
+    }
+
+    .character-icons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .character-icon {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .character-icon:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Лучшие Исекай-Аниме 2023–2025</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#intro">Введение</a></li>
+      <li><a href="#top2023">Топ исекай 2023</a></li>
+      <li><a href="#top2024">Топ исекай 2024</a></li>
+      <li><a href="#top2025">Ожидаемые новинки 2025</a></li>
+      <li><a href="/index_2.html">Топ исекай аниме</a></li>
+    </ul>
+  </nav>
+
+  <section id="intro">
+    <h2>Введение</h2>
+    <p>Мы исследуем мир аниме в жанре исекай за последние годы, анализируя популярность и особенности новых релизов.</p>
+  </section>
+
+  <section id="top2023">
+    <h2>Топ исекай 2023</h2>
+    <p>Среди хитов 2023 года выделяются:</p>
+    <ul>
+      <li><em>Reborn to Master the Blade</em></li>
+      <li><em>Mushoku Tensei: Jobless Reincarnation Season 2</em></li>
+      <li><em>Handyman Saitou in Another World</em></li>
+    </ul>
+    <img src="MV5BODRmMzA2MzYtYWM3ZS00NDM4LWFlOTAtYjExYjJmNzc5NGYyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Reborn to Master the Blade" class="anime-image">
+    <img src="1715504768_1.jpg" alt="Mushoku Tensei" class="anime-image">
+    <img src="MV5BOWE1YzhhMzYtNjc4OS00NDZkLTkzZGItN2YwZTg5YTI0NzBhXkEyXkFqcGc@._V1_.jpg" alt="Handyman Saitou in Another World" class="anime-image">
+  </section>
+
+  <section id="top2024">
+    <h2>Топ исекай 2024</h2>
+    <p>2024 год принес продолжения популярных серий и новые сюжеты. В их числе:</p>
+    <ul>
+      <li><em>That Time I Got Reincarnated as a Slime – Season 3</em></li>
+    </ul>
+    <img src="tensei-shitara-slime-datta-ken-56-0x0.webp" alt="Slime Season 3" class="anime-image">
+  </section>
+
+  <section id="top2025">
+    <h2>Ожидаемые новинки 2025</h2>
+    <p>Среди ожидаемых новинок:</p>
+    <ul>
+      <li><em>Reincarnated as a Dragon Hatchling</em></li>
+    </ul>
+    <img src="reincarnated-as-a-dragon-hatchling-anime-announced-v0-Ag969KzpMi62O3sbXetsxttIM1RVlqQx5IKoFSuTLr0.webp" alt="Reincarnated as a Dragon Hatchling" class="anime-image">
+  </section>
+
+  <section>
+    <h2>Иконки персонажей</h2>
+    <div class="character-icons">
+      <img src="MT-AN-S2P2-Rudeus-Uniform-FullBody.jpg" alt="Rudeus" class="character-icon">
+      <img src="Demon_Lord_Rimuru_Manga.webp" alt="Rimuru" class="character-icon">
+      <img src="98357d5b001533aeb874ca2c69e77a9c.jpg" alt="Diablo" class="character-icon">
+    </div>
+  </section>
+
+</body>
+</html>
