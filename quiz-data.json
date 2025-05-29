@@ -1,0 +1,54 @@
+{
+    "questions": [
+        {
+            "question": "Which anime series features a character named Monkey D. Luffy?",
+            "options": [
+                "One Piece",
+                "Naruto",
+                "Dragon Ball",
+                "Bleach"
+            ],
+            "correct": 0
+        },
+        {
+            "question": "In 'Death Note', what is the name of the Shinigami who drops the Death Note?",
+            "options": [
+                "Rem",
+                "Ryuk",
+                "Gelus",
+                "Sidoh"
+            ],
+            "correct": 1
+        },
+        {
+            "question": "What is the name of Naruto's ninja village?",
+            "options": [
+                "Sand Village",
+                "Mist Village",
+                "Leaf Village",
+                "Stone Village"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "Which anime features a boy who can see spirits called 'Yokai'?",
+            "options": [
+                "Natsume Yuujinchou",
+                "Yu Yu Hakusho",
+                "Noragami",
+                "GeGeGe no Kitaro"
+            ],
+            "correct": 0
+        },
+        {
+            "question": "What is the name of the virtual world in 'Sword Art Online'?",
+            "options": [
+                "The Oasis",
+                "Aincrad",
+                "The Matrix",
+                "The Grid"
+            ],
+            "correct": 1
+        }
+    ]
+} 
