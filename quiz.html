@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аниме Квиз</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .quiz-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .difficulty-1 { background-color: #28a745; }
+        .difficulty-2 { background-color: #17a2b8; }
+        .difficulty-3 { background-color: #ffc107; color: #000; }
+        .difficulty-4 { background-color: #fd7e14; }
+        .difficulty-5 { background-color: #dc3545; }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background-color: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .option.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #1e7e34;
+        }
+
+        .option.wrong {
+            background-color: #dc3545;
+            color: white;
+            border-color: #bd2130;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+
+        .progress {
+            margin-bottom: 20px;
+            color: #6c757d;
+            text-align: center;
+        }
+
+        .score-display {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .feedback {
+            text-align: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Аниме Квиз</h1>
+        <div class="progress">
+            Вопрос <span id="current-question">1</span> из <span id="total-questions">5</span>
+            <div class="score-display">Текущий счет: <span id="current-score">0</span> из <span id="total-answered">0</span></div>
+        </div>
+        <div id="question" class="question"></div>
+        <div id="options" class="options"></div>
+        <div class="controls">
+            <button id="prev-btn" disabled>Предыдущий</button>
+            <button id="next-btn" disabled>Следующий</button>
+        </div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        let questions = [
+            {
+                "question": "В каком аниме-сериале есть персонаж по имени Манки Д. Луффи?",
+                "options": ["One Piece", "Наруто", "Драгон Болл", "Блич"],
+                "correct": 0,
+                "difficulty": 1
+            },
+            {
+                "question": "В 'Тетради смерти', как зовут Синигами, который сбросил Тетрадь смерти?",
+                "options": ["Рем", "Рюк", "Гелус", "Сидо"],
+                "correct": 1,
+                "difficulty": 2
+            },
+            {
+                "question": "Как называется деревня ниндзя Наруто?",
+                "options": ["Деревня Песка", "Деревня Тумана", "Деревня Листвы", "Деревня Камня"],
+                "correct": 2,
+                "difficulty": 1
+            },
+            {
+                "question": "В каком аниме главный герой может видеть духов, называемых 'Ёкаи'?",
+                "options": ["Тетрадь дружбы Нацумэ", "Yu Yu Hakusho", "Бездомный бог", "Гэгэгэ но Китаро"],
+                "correct": 0,
+                "difficulty": 3
+            },
+            {
+                "question": "Как называется виртуальный мир в 'Мастера Меча Онлайн'?",
+                "options": ["Оазис", "Айнкрад", "Матрица", "Грид"],
+                "correct": 1,
+                "difficulty": 2
+            },
+            {
+                "question": "Кто из перечисленных НЕ является Титаном-оборотнем в 'Атаке Титанов'?",
+                "options": ["Эрен Йегер", "Микаса Аккерман", "Анни Леонхарт", "Райнер Браун"],
+                "correct": 1,
+                "difficulty": 3
+            },
+            {
+                "question": "Как зовут младшего брата Эдварда Элрика в 'Стальном Алхимике'?",
+                "options": ["Альфонс", "Артур", "Александр", "Адриан"],
+                "correct": 0,
+                "difficulty": 1
+            },
+            {
+                "question": "В 'Невероятных приключениях ДжоДжо', как называется Стенд Джотаро Куджо?",
+                "options": ["The World", "Crazy Diamond", "Star Platinum", "Gold Experience"],
+                "correct": 2,
+                "difficulty": 2
+            },
+            {
+                "question": "В каком аниме есть персонаж, который может стирать воспоминания людей, съедая их?",
+                "options": ["Токийский гуль", "Клинок, рассекающий демонов", "Магическая битва", "Обещанный Неверленд"],
+                "correct": 0,
+                "difficulty": 3
+            },
+            {
+                "question": "Как зовут сильнейшего героя в 'Ванпанчмен'?",
+                "options": ["Кинг", "Сайтама", "Генос", "Тацумаки"],
+                "correct": 1,
+                "difficulty": 1
+            },
+            {
+                "question": "В 'Врата;Штейна', как называется устройство, способное отправлять сообщения в прошлое?",
+                "options": ["Машина прыжков во времени", "D-письмо", "Гаджет будущего", "Машина времени"],
+                "correct": 1,
+                "difficulty": 4
+            },
+            {
+                "question": "Как называется организация, охотящаяся на демонов в 'Клинок, рассекающий демонов'?",
+                "options": ["Охотники на демонов", "Корпус уничтожения демонов", "Истребители демонов", "Борцы с демонами"],
+                "correct": 1,
+                "difficulty": 2
+            },
+            {
+                "question": "Какой персонаж в 'Hunter x Hunter' известен как 'Фокусник' и использует игральные карты как оружие?",
+                "options": ["Киллуа", "Хисока", "Курапика", "Леорио"],
+                "correct": 1,
+                "difficulty": 2
+            },
+            {
+                "question": "Как зовут легендарного Супер Сайяна, появляющегося раз в 1000 лет в мире Dragon Ball?",
+                "options": ["Броли", "Бардок", "Ямоши", "Гогета"],
+                "correct": 2,
+                "difficulty": 5
+            },
+            {
+                "question": "В 'Код Гиас', как называется особая сила Лелуша?",
+                "options": ["Сила Короля", "Гиас", "Императорский глаз", "Королевский приказ"],
+                "correct": 1,
+                "difficulty": 3
+            },
+            {
+                "question": "Какой тип проклятия является сильнейшим шикигами Мегуми Фушигуро в 'Магической битве'?",
+                "options": ["Божественный пёс", "Нуэ", "Махорага", "Восьмирукий меч расходящихся путей божественный полководец Махорага"],
+                "correct": 3,
+                "difficulty": 5
+            },
+            {
+                "question": "Что из перечисленного НЕ является одним из Трёх Великих Додзюцу в 'Наруто'?",
+                "options": ["Шаринган", "Бьякуган", "Риннеган", "Дзёган"],
+                "correct": 3,
+                "difficulty": 4
+            },
+            {
+                "question": "Как называется главная антагонистическая организация в 'Стальной алхимик: Братство'?",
+                "options": ["Государственная армия", "Гомункулы", "Ишварцы", "Химеры"],
+                "correct": 1,
+                "difficulty": 2
+            },
+            {
+                "question": "В 'Евангелион', кем на самом деле является Первый Ангел, Адам?",
+                "options": ["Гигант света", "Инопланетная сущность", "Творение человека", "Семя жизни"],
+                "correct": 3,
+                "difficulty": 5
+            },
+            {
+                "question": "Как называется специальная техника, позволяющая пользователям манипулировать реальностью в 'Непутёвый ученик в школе магии'?",
+                "options": ["Магический след", "Последовательность активации", "Магический расчёт", "Псионная манипуляция"],
+                "correct": 1,
+                "difficulty": 4
+            }
+        ];
+        let currentQuestion = 0;
+        let score = 0;
+        let answers = [];
+        let currentDifficulty = 3;
+        let consecutiveCorrect = 0;
+        let consecutiveWrong = 0;
+        let usedQuestions = new Set();
+
+        function getNextQuestion() {
+            // Filter questions by current difficulty
+            let availableQuestions = questions.filter(q => 
+                q.difficulty === currentDifficulty && 
+                !usedQuestions.has(questions.indexOf(q))
+            );
+            
+            // If no questions at current difficulty, look for adjacent difficulties
+            if (availableQuestions.length === 0) {
+                let diff = 1;
+                while (availableQuestions.length === 0 && (currentDifficulty - diff >= 1 || currentDifficulty + diff <= 5)) {
+                    // Try higher difficulty first if doing well, lower if not
+                    let tryDifficulty = consecutiveCorrect > consecutiveWrong ? 
+                        currentDifficulty + diff : currentDifficulty - diff;
+                    
+                    if (tryDifficulty >= 1 && tryDifficulty <= 5) {
+                        availableQuestions = questions.filter(q => 
+                            q.difficulty === tryDifficulty && 
+                            !usedQuestions.has(questions.indexOf(q))
+                        );
+                    }
+                    diff++;
+                }
+            }
+            
+            // If still no questions, reset used questions
+            if (availableQuestions.length === 0) {
+                usedQuestions.clear();
+                availableQuestions = questions.filter(q => q.difficulty === currentDifficulty);
+            }
+            
+            // Randomly select a question from available ones
+            const questionIndex = Math.floor(Math.random() * availableQuestions.length);
+            const selectedQuestion = availableQuestions[questionIndex];
+            usedQuestions.add(questions.indexOf(selectedQuestion));
+            
+            return selectedQuestion;
+        }
+
+        function adjustDifficulty(wasCorrect) {
+            if (wasCorrect) {
+                consecutiveCorrect++;
+                consecutiveWrong = 0;
+                if (consecutiveCorrect >= 2 && currentDifficulty < 5) {
+                    currentDifficulty++;
+                    consecutiveCorrect = 0;
+                }
+            } else {
+                consecutiveWrong++;
+                consecutiveCorrect = 0;
+                if (consecutiveWrong >= 2 && currentDifficulty > 1) {
+                    currentDifficulty--;
+                    consecutiveWrong = 0;
+                }
+            }
+        }
+
+        function selectOption(index) {
+            if (answers[currentQuestion] !== undefined) {
+                return;
+            }
+            
+            const question = questions[currentQuestion];
+            answers[currentQuestion] = index;
+            const options = document.querySelectorAll('.option');
+            const correctAnswer = question.correct;
+            
+            options.forEach(option => {
+                option.classList.add('disabled');
+            });
+
+            options[index].classList.add(index === correctAnswer ? 'correct' : 'wrong');
+            options[correctAnswer].classList.add('correct');
+
+            const wasCorrect = index === correctAnswer;
+            if (wasCorrect) {
+                score++;
+            }
+
+            // Adjust difficulty based on answer
+            adjustDifficulty(wasCorrect);
+
+            document.getElementById('current-score').textContent = score;
+            document.getElementById('total-answered').textContent = answers.filter(a => a !== undefined).length;
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function showQuestion() {
+            const question = getNextQuestion();
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('question').innerHTML = `
+                <div class="difficulty difficulty-${question.difficulty}">
+                    Сложность: ${question.difficulty}/5
+                </div><br>
+                ${question.question}
+            `;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                
+                if (answers[currentQuestion] !== undefined) {
+                    optionElement.classList.add('disabled');
+                    if (index === answers[currentQuestion]) {
+                        optionElement.classList.add(index === question.correct ? 'correct' : 'wrong');
+                    }
+                    if (index === question.correct) {
+                        optionElement.classList.add('correct');
+                    }
+                }
+                
+                optionElement.textContent = option;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+
+            updateButtons();
+        }
+
+        function updateButtons() {
+            document.getElementById('prev-btn').disabled = currentQuestion === 0;
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Завершить' : 'Следующий';
+            nextBtn.disabled = answers[currentQuestion] === undefined;
+        }
+
+        document.getElementById('prev-btn').onclick = () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        };
+
+        document.getElementById('next-btn').onclick = () => {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                showResults();
+            }
+        };
+
+        function showResults() {
+            const resultElement = document.getElementById('result');
+            const percentage = (score / answers.length) * 100;
+            let message;
+            
+            if (percentage === 100) {
+                message = "Великолепно! Вы настоящий эксперт в аниме!";
+            } else if (percentage >= 80) {
+                message = "Отличный результат! Вы очень хорошо разбираетесь в аниме!";
+            } else if (percentage >= 60) {
+                message = "Хороший результат! Но есть куда расти!";
+            } else if (percentage >= 40) {
+                message = "Неплохая попытка! Продолжайте изучать аниме!";
+            } else {
+                message = "Начало положено! Попробуйте ещё раз!";
+            }
+
+            resultElement.innerHTML = `
+                <h2>Квиз завершен!</h2>
+                <p>Ваш результат: ${score} из ${answers.length} (${percentage}%)</p>
+                <p>${message}</p>
+                <button onclick="restartQuiz()">Начать заново</button>
+            `;
+
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('prev-btn').style.display = 'none';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answers = [];
+            currentDifficulty = 3;
+            consecutiveCorrect = 0;
+            consecutiveWrong = 0;
+            usedQuestions.clear();
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('next-btn').style.display = 'block';
+            document.getElementById('prev-btn').style.display = 'block';
+            document.getElementById('current-score').textContent = '0';
+            document.getElementById('total-answered').textContent = '0';
+            showQuestion();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            showQuestion();
+            document.getElementById('total-questions').textContent = questions.length;
+            document.getElementById('current-score').textContent = '0';
+            document.getElementById('total-answered').textContent = '0';
+        });
+    </script>
+</body>
+</html> 
